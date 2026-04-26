@@ -163,20 +163,29 @@ Supported filters:
 
 1. Push the project to GitHub.
 2. Import the repository in Vercel.
-3. Set the root directory to `client`.
+3. Use these project settings:
+   - Root directory: `client`
+   - Framework preset: Vite
+   - Install command: `npm install`
+   - Build command: `npm run build`
+   - Output directory: `dist`
 4. Add `VITE_API_BASE_URL` with your deployed backend URL plus `/api`.
 5. Deploy.
+
+The `client/vercel.json` file rewrites all frontend routes to `index.html` so React Router pages work on refresh and direct links.
 
 ### Backend API on Vercel
 
 The Express API is ready for Vercel serverless deployment through `server/api/index.js` and `server/vercel.json`. This works well for this stateless REST API.
 
 1. Import the same GitHub repository in Vercel as a second project.
-2. Set the root directory to `server`.
-3. Framework preset: Other.
-4. Install command: `npm install`
-5. Build command: leave empty.
-6. Add environment variables:
+2. Use these project settings:
+   - Root directory: `server`
+   - Framework preset: Other
+   - Install command: `npm install`
+   - Build command: leave empty
+   - Output directory: leave empty
+3. Add environment variables:
    - `CLIENT_URL`
    - `DB_HOST`
    - `DB_PORT`
@@ -185,7 +194,7 @@ The Express API is ready for Vercel serverless deployment through `server/api/in
    - `DB_NAME`
    - `DB_SSL`
    - `DB_SSL_REJECT_UNAUTHORIZED`
-7. Deploy and use the deployment URL plus `/api` as the frontend `VITE_API_BASE_URL`.
+4. Deploy and use the deployment URL plus `/api` as the frontend `VITE_API_BASE_URL`.
 
 Use a separate backend host such as Render or Railway if you need long-running processes, WebSockets, background workers, or finer control over persistent database connections. For this portfolio REST API, Vercel serverless is enough.
 

@@ -1,0 +1,131 @@
+USE job_board;
+
+DELETE FROM jobs;
+ALTER TABLE jobs AUTO_INCREMENT = 1;
+
+INSERT INTO jobs (
+  title,
+  company,
+  location,
+  category,
+  job_type,
+  experience_level,
+  salary_min,
+  salary_max,
+  description,
+  requirements,
+  apply_url,
+  is_featured
+) VALUES
+(
+  'Frontend React Developer',
+  'BrightLayer Studio',
+  'Remote',
+  'Engineering',
+  'Full-time',
+  'Mid Level',
+  85000,
+  115000,
+  'Build polished customer-facing interfaces for a fast-growing product team. You will work with designers, API engineers, and product managers to ship accessible React features.',
+  'Strong React fundamentals, modern JavaScript experience, comfort with REST APIs, and a good eye for responsive user interfaces.',
+  'https://example.com/jobs/frontend-react-developer',
+  TRUE
+),
+(
+  'Product Designer',
+  'Northstar Apps',
+  'New York, NY',
+  'Design',
+  'Full-time',
+  'Senior Level',
+  95000,
+  135000,
+  'Own end-to-end design for web and mobile product experiences. You will research user needs, create prototypes, and partner with engineers through launch.',
+  'Portfolio showing shipped digital products, strong interaction design skills, and experience using design systems in a collaborative environment.',
+  'https://example.com/jobs/product-designer',
+  TRUE
+),
+(
+  'Backend Node.js Engineer',
+  'DataForge Labs',
+  'Austin, TX',
+  'Engineering',
+  'Full-time',
+  'Senior Level',
+  105000,
+  150000,
+  'Design and maintain REST APIs, database workflows, and service integrations for a modern hiring platform serving thousands of users each week.',
+  'Professional Node.js and Express experience, SQL knowledge, API design skills, and confidence debugging production backend systems.',
+  'https://example.com/jobs/backend-node-engineer',
+  TRUE
+),
+(
+  'Marketing Coordinator',
+  'LaunchPath',
+  'Chicago, IL',
+  'Marketing',
+  'Part-time',
+  'Entry Level',
+  42000,
+  58000,
+  'Support campaign planning, content publishing, and reporting for a lean growth team. This role is ideal for someone organized and eager to learn.',
+  'Excellent writing skills, attention to detail, comfort with spreadsheets, and interest in digital marketing channels and analytics.',
+  'https://example.com/jobs/marketing-coordinator',
+  FALSE
+),
+(
+  'Data Analyst',
+  'SignalWorks',
+  'Seattle, WA',
+  'Data',
+  'Contract',
+  'Mid Level',
+  70000,
+  98000,
+  'Turn product and customer data into dashboards, insights, and recommendations. You will partner with operations and product leadership.',
+  'SQL fluency, data visualization experience, clear communication, and ability to translate messy business questions into useful analysis.',
+  'https://example.com/jobs/data-analyst',
+  FALSE
+),
+(
+  'Customer Success Manager',
+  'CloudDesk',
+  'San Francisco, CA',
+  'Customer Success',
+  'Full-time',
+  'Lead',
+  90000,
+  125000,
+  'Lead onboarding and retention programs for mid-market customers. You will manage relationships, identify risks, and coordinate with product teams.',
+  'Experience managing B2B SaaS accounts, strong presentation skills, structured follow-through, and comfort using CRM tools.',
+  'https://example.com/jobs/customer-success-manager',
+  FALSE
+),
+(
+  'Junior QA Tester',
+  'PixelProof',
+  'Remote',
+  'Engineering',
+  'Internship',
+  'Entry Level',
+  30000,
+  42000,
+  'Test web application workflows, document bugs clearly, and help the engineering team maintain reliable releases across browsers and devices.',
+  'Curiosity, careful written communication, basic web application knowledge, and willingness to learn manual and automated QA practices.',
+  'https://example.com/jobs/junior-qa-tester',
+  FALSE
+),
+(
+  'Sales Development Representative',
+  'RevenueRiver',
+  'Austin, TX',
+  'Sales',
+  'Full-time',
+  'Entry Level',
+  50000,
+  70000,
+  'Research accounts, qualify inbound leads, and create outbound opportunities for a growing B2B software sales team.',
+  'Confident communication, resilience, organized pipeline habits, and interest in learning consultative sales methods.',
+  'https://example.com/jobs/sales-development-representative',
+  FALSE
+);

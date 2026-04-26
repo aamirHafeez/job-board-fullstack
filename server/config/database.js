@@ -18,9 +18,15 @@ function getSslConfig() {
     return undefined;
   }
 
-  return {
+  const sslConfig = {
     rejectUnauthorized: process.env.DB_SSL_REJECT_UNAUTHORIZED !== 'false'
   };
+
+  if (process.env.DB_SSL_CA) {
+    sslConfig.ca = process.env.DB_SSL_CA.replace(/\\n/g, '\n');
+  }
+
+  return sslConfig;
 }
 
 export const pool = mysql.createPool({

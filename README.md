@@ -39,7 +39,9 @@ server/
   routes/
 database/
   schema.sql
+  schema.hosted.sql
   seed.sql
+  seed.hosted.sql
 docs/
   project-brief.md
 ```
@@ -69,6 +71,13 @@ Open MySQL and run:
 ```bash
 mysql -u root -p < database/schema.sql
 mysql -u root -p < database/seed.sql
+```
+
+For hosted MySQL services where the provider already creates the database for you, use:
+
+```bash
+mysql -h <DB_HOST> -P <DB_PORT> -u <DB_USER> -p <DB_NAME> < database/schema.hosted.sql
+mysql -h <DB_HOST> -P <DB_PORT> -u <DB_USER> -p <DB_NAME> < database/seed.hosted.sql
 ```
 
 If you are already inside a MySQL shell, run:
@@ -125,9 +134,56 @@ DB_PASSWORD=your_mysql_password
 DB_NAME=job_board
 DB_SSL=false
 DB_SSL_REJECT_UNAUTHORIZED=true
+DB_SSL_CA=
 ```
 
-Use `DB_SSL=true` for hosted MySQL providers that require TLS. Keep `DB_SSL_REJECT_UNAUTHORIZED=true` in production unless your provider specifically documents otherwise.
+Use `DB_SSL=true` for hosted MySQL providers that require TLS. Keep `DB_SSL_REJECT_UNAUTHORIZED=true` in production unless your provider specifically documents otherwise. If your provider gives you a CA certificate, paste the certificate into `DB_SSL_CA`.
+
+## Free Hosted MySQL
+
+Aiven is the recommended free MySQL option for this project because it provides a managed MySQL free tier with no credit card requirement and no fixed expiry. The free tier is enough for a portfolio demo and small prototype.
+
+### Create an Aiven MySQL database
+
+1. Go to `https://aiven.io/free-tier`.
+2. Create a free account.
+3. Create a new service.
+4. Choose `MySQL`.
+5. Choose the free plan.
+6. Wait until the service status is running.
+7. Open the service `Overview` page and copy:
+   - Host
+   - Port
+   - User
+   - Password
+   - Database name, usually `defaultdb`
+8. Download the CA certificate if Aiven shows one in connection details.
+
+### Load this app's database
+
+Use the hosted SQL files because Aiven already creates the database:
+
+```bash
+mysql -h <AIVEN_HOST> -P <AIVEN_PORT> -u <AIVEN_USER> -p <AIVEN_DATABASE> < database/schema.hosted.sql
+mysql -h <AIVEN_HOST> -P <AIVEN_PORT> -u <AIVEN_USER> -p <AIVEN_DATABASE> < database/seed.hosted.sql
+```
+
+If you use MySQL Workbench, DBeaver, or Aiven's connection instructions instead of the CLI, run `database/schema.hosted.sql` first and `database/seed.hosted.sql` second.
+
+### Vercel backend environment for Aiven
+
+```env
+DB_HOST=<AIVEN_HOST>
+DB_PORT=<AIVEN_PORT>
+DB_USER=<AIVEN_USER>
+DB_PASSWORD=<AIVEN_PASSWORD>
+DB_NAME=<AIVEN_DATABASE>
+DB_SSL=true
+DB_SSL_REJECT_UNAUTHORIZED=true
+DB_SSL_CA=<AIVEN_CA_CERTIFICATE_CONTENT>
+```
+
+If the CA certificate is hard to paste into Vercel, you can temporarily set `DB_SSL_REJECT_UNAUTHORIZED=false` for a portfolio demo, but verifying the CA is better.
 
 ## API Endpoints
 
@@ -194,6 +250,7 @@ The Express API is ready for Vercel serverless deployment through `server/api/in
    - `DB_NAME`
    - `DB_SSL`
    - `DB_SSL_REJECT_UNAUTHORIZED`
+   - `DB_SSL_CA`
 4. Deploy and use the deployment URL plus `/api` as the frontend `VITE_API_BASE_URL`.
 
 Use a separate backend host such as Render or Railway if you need long-running processes, WebSockets, background workers, or finer control over persistent database connections. For this portfolio REST API, Vercel serverless is enough.

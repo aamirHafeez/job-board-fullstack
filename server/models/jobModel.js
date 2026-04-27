@@ -73,15 +73,17 @@ export async function findJobs(filters = {}) {
   const offset = (page - 1) * limit;
   const { whereSql, values } = buildWhereClause(filters);
 
+  // Some hosted MySQL plans reject placeholders in LIMIT/OFFSET, so only the
+  // already-clamped numeric values are interpolated here.
   const [rows] = await pool.execute(
     `
       SELECT ${jobSelect}
       FROM jobs
       ${whereSql}
       ORDER BY is_featured DESC, created_at DESC
-      LIMIT ? OFFSET ?
+      LIMIT ${limit} OFFSET ${offset}
     `,
-    [...values, limit, offset]
+    values
   );
 
   const [countRows] = await pool.execute(

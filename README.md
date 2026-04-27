@@ -8,6 +8,7 @@ TalentBoard is a portfolio-ready job board built with React, Vite, Express, REST
 - Browse jobs with keyword search and filters
 - Filter by location, category, job type, and experience level
 - Job details page with salary, requirements, and apply link
+- Employer sign up and sign in with protected job management
 - Employer dashboard with create, edit, and delete workflows
 - Frontend and backend validation
 - Loading, empty, error, and 404 states
@@ -40,6 +41,7 @@ server/
 database/
   schema.sql
   schema.hosted.sql
+  migration-auth.sql
   seed.sql
   seed.hosted.sql
 docs/
@@ -135,6 +137,7 @@ DB_NAME=job_board
 DB_SSL=false
 DB_SSL_REJECT_UNAUTHORIZED=true
 DB_SSL_CA=
+AUTH_SESSION_DAYS=7
 ```
 
 Use `DB_SSL=true` for hosted MySQL providers that require TLS. Keep `DB_SSL_REJECT_UNAUTHORIZED=true` in production unless your provider specifically documents otherwise. If your provider gives you a CA certificate, paste the certificate into `DB_SSL_CA`.
@@ -157,11 +160,18 @@ Base URL: `http://localhost:5000/api`
 | Method | Endpoint | Description |
 | --- | --- | --- |
 | GET | `/health` | API health check |
+| POST | `/auth/signup` | Create an employer account |
+| POST | `/auth/signin` | Sign in and receive an auth token |
+| GET | `/auth/me` | Get the signed-in user |
+| POST | `/auth/signout` | Sign out the current token |
 | GET | `/jobs` | List jobs with optional filters |
+| GET | `/jobs/mine` | List jobs created by the signed-in employer |
 | GET | `/jobs/:id` | Get one job |
 | POST | `/jobs` | Create a job |
 | PUT | `/jobs/:id` | Update a job |
 | DELETE | `/jobs/:id` | Delete a job |
+
+The employer dashboard and job write endpoints require an `Authorization: Bearer <token>` header.
 
 ### Query Filters
 
@@ -216,6 +226,7 @@ The Express API is ready for Vercel serverless deployment through `server/api/in
    - `DB_SSL`
    - `DB_SSL_REJECT_UNAUTHORIZED`
    - `DB_SSL_CA`
+   - `AUTH_SESSION_DAYS`
 4. Deploy and use the deployment URL plus `/api` as the frontend `VITE_API_BASE_URL`.
 
 Use a separate backend host such as Render or Railway if you need long-running processes, WebSockets, background workers, or finer control over persistent database connections. For this portfolio REST API, Vercel serverless is enough.

@@ -1,6 +1,7 @@
-import { BriefcaseBusiness, Menu, X } from 'lucide-react';
+import { BriefcaseBusiness, LogOut, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import { useAuth } from '../context/useAuth.js';
 
 const navLinks = [
   { to: '/', label: 'Home' },
@@ -11,6 +12,12 @@ const navLinks = [
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { isAuthenticated, signout, user } = useAuth();
+
+  async function handleSignout() {
+    await signout();
+    setIsOpen(false);
+  }
 
   return (
     <header className="site-header">
@@ -42,6 +49,37 @@ export default function Navbar() {
               {link.label}
             </NavLink>
           ))}
+
+          <div className="nav-auth">
+            {isAuthenticated ? (
+              <>
+                <span className="nav-user">{user.name}</span>
+                <button className="button button-secondary nav-auth-button" type="button" onClick={handleSignout}>
+                  <LogOut size={17} aria-hidden="true" />
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <>
+                <NavLink
+                  to="/signin"
+                  className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+                  onClick={() => setIsOpen(false)}
+                >
+                  Sign in
+                </NavLink>
+                <NavLink
+                  to="/signup"
+                  className={({ isActive }) =>
+                    isActive ? 'button button-primary nav-auth-button' : 'button button-primary nav-auth-button'
+                  }
+                  onClick={() => setIsOpen(false)}
+                >
+                  Sign up
+                </NavLink>
+              </>
+            )}
+          </div>
         </div>
       </nav>
     </header>

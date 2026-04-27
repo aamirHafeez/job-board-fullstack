@@ -23,6 +23,13 @@
   box-sizing: border-box;
 }
 
+html,
+body,
+#root {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
   min-width: 320px;
@@ -79,6 +86,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 18px;
   min-height: 72px;
 }
 
@@ -120,10 +128,6 @@ main {
   background: var(--color-surface-strong);
 }
 
-.menu-button {
-  display: none;
-}
-
 .hero-section {
   padding: 78px 0 64px;
 }
@@ -146,6 +150,15 @@ main {
 .hero-copy h1 {
   max-width: 720px;
   font-size: clamp(2.6rem, 6vw, 5.4rem);
+}
+
+.hero-copy,
+.auth-copy,
+.browse-results,
+.details-panel,
+.job-form,
+.auth-card {
+  min-width: 0;
 }
 
 .hero-copy p,
@@ -319,8 +332,36 @@ main {
   background: #ffffff;
 }
 
+.icon-button.menu-button {
+  display: none;
+}
+
 .icon-button.danger {
   color: var(--color-danger);
+}
+
+.nav-auth {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 6px;
+  padding-left: 10px;
+  border-left: 1px solid var(--color-border);
+}
+
+.nav-user {
+  max-width: 140px;
+  overflow: hidden;
+  color: var(--color-primary-dark);
+  font-weight: 850;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-auth-button {
+  min-height: 40px;
+  padding-inline: 13px;
+  white-space: nowrap;
 }
 
 .text-button {
@@ -348,6 +389,7 @@ main {
   align-items: center;
   gap: 10px;
   width: min(100%, 720px);
+  max-width: 100%;
   margin: 28px 0 0;
   padding: 8px;
   border: 1px solid var(--color-border);
@@ -362,11 +404,16 @@ main {
 }
 
 .search-bar input {
+  min-width: 0;
   width: 100%;
   border: 0;
   outline: 0;
   color: var(--color-text);
   background: transparent;
+}
+
+.search-bar .button {
+  min-width: 0;
 }
 
 .job-list {
@@ -582,6 +629,61 @@ main {
   font-weight: 800;
 }
 
+.auth-section {
+  display: grid;
+  align-items: center;
+}
+
+.auth-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(340px, 0.72fr);
+  gap: 42px;
+  align-items: center;
+}
+
+.auth-copy h1 {
+  margin: 10px 0 16px;
+  color: #0f172a;
+  font-size: clamp(2.35rem, 5vw, 4.4rem);
+  line-height: 1.04;
+}
+
+.auth-copy p {
+  max-width: 600px;
+  color: var(--color-muted);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.auth-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+  padding: 28px;
+}
+
+.auth-card h2 {
+  margin: 0 0 20px;
+  color: #0f172a;
+  font-size: 1.5rem;
+}
+
+.auth-submit {
+  width: 100%;
+}
+
+.auth-switch {
+  margin: 18px 0 0;
+  color: var(--color-muted);
+  text-align: center;
+}
+
+.auth-switch a {
+  color: var(--color-primary);
+  font-weight: 850;
+}
+
 .dashboard-header {
   align-items: center;
 }
@@ -683,11 +785,22 @@ main {
   }
 }
 
+@media (max-width: 1080px) {
+  .nav-link {
+    padding-inline: 10px;
+  }
+
+  .nav-user {
+    max-width: 110px;
+  }
+}
+
 @media (max-width: 920px) {
   .hero-grid,
   .browse-layout,
   .feature-grid,
-  .two-columns {
+  .two-columns,
+  .auth-layout {
     grid-template-columns: 1fr;
   }
 
@@ -703,8 +816,8 @@ main {
   }
 }
 
-@media (max-width: 720px) {
-  .menu-button {
+@media (max-width: 860px) {
+  .icon-button.menu-button {
     display: inline-grid;
   }
 
@@ -727,12 +840,30 @@ main {
     display: flex;
   }
 
+  .nav-auth {
+    align-items: stretch;
+    flex-direction: column;
+    margin-left: 0;
+    padding: 10px 0 0;
+    border-top: 1px solid var(--color-border);
+    border-left: 0;
+  }
+
+  .nav-user {
+    max-width: none;
+    padding: 10px 14px;
+  }
+
+  .nav-auth-button {
+    width: 100%;
+  }
+
   .hero-section {
     padding-top: 46px;
   }
 
   .hero-copy h1 {
-    font-size: 2.7rem;
+    font-size: clamp(2.15rem, 10vw, 2.7rem);
   }
 
   .search-bar {
@@ -753,7 +884,43 @@ main {
 
   .details-panel,
   .job-form,
+  .auth-card,
   .filter-panel {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 520px) {
+  .container {
+    width: min(100% - 24px, var(--container));
+  }
+
+  .brand {
+    font-size: 1.05rem;
+  }
+
+  .brand-mark {
+    width: 36px;
+    height: 36px;
+  }
+
+  .hero-copy h1,
+  .auth-copy h1 {
+    font-size: clamp(2rem, 9vw, 2.35rem);
+    overflow-wrap: break-word;
+  }
+
+  .hero-copy p,
+  .auth-copy p,
+  .page-heading p {
+    font-size: 1rem;
+  }
+
+  .job-card,
+  .metric-card,
+  .feature-item,
+  .status-box,
+  .not-found {
     padding: 18px;
   }
 }

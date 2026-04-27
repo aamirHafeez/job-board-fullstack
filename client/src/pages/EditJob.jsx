@@ -2,12 +2,14 @@ import { ArrowLeft } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import JobForm from '../components/JobForm.jsx';
-import { ErrorState, LoadingState } from '../components/StatusMessage.jsx';
+import { EmptyState, ErrorState, LoadingState } from '../components/StatusMessage.jsx';
+import { useAuth } from '../context/useAuth.js';
 import { getJob, updateJob } from '../services/api.js';
 
 export default function EditJob() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [job, setJob] = useState(null);
   const [status, setStatus] = useState('loading');
   const [error, setError] = useState('');
@@ -58,7 +60,18 @@ export default function EditJob() {
         {status === 'loading' ? <LoadingState message="Loading job..." /> : null}
         {status === 'error' ? <ErrorState message={error} onRetry={loadJob} /> : null}
         {error && status === 'success' ? <div className="alert">{error}</div> : null}
-        {status === 'success' ? (
+        {status === 'success' && job.userId !== user?.id ? (
+          <EmptyState
+            title="This listing belongs to another employer"
+            message="Only the account that created a job can edit it."
+            action={
+              <Link className="button button-primary" to="/dashboard">
+                Back to Dashboard
+              </Link>
+            }
+          />
+        ) : null}
+        {status === 'success' && job.userId === user?.id ? (
           <JobForm initialJob={job} onSubmit={handleSubmit} submitLabel="Update job" isSubmitting={isSubmitting} />
         ) : null}
       </div>

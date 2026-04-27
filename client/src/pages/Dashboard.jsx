@@ -2,7 +2,7 @@ import { Edit, Plus, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { EmptyState, ErrorState, LoadingState } from '../components/StatusMessage.jsx';
-import { deleteJob, getJobs } from '../services/api.js';
+import { deleteJob, getMyJobs } from '../services/api.js';
 import { formatDate } from '../utils/formatters.js';
 
 export default function Dashboard() {
@@ -14,7 +14,7 @@ export default function Dashboard() {
   async function loadJobs() {
     try {
       setStatus('loading');
-      const data = await getJobs({ limit: 100 });
+      const data = await getMyJobs({ limit: 100 });
       setJobs(data.jobs);
       setStatus('success');
     } catch (err) {

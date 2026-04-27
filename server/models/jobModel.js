@@ -2,6 +2,7 @@ import { pool } from '../config/database.js';
 
 const jobSelect = `
   id,
+  user_id AS userId,
   title,
   company,
   location,
@@ -50,6 +51,11 @@ function buildWhereClause(filters) {
 
   if (filters.featured === 'true' || filters.featured === true) {
     conditions.push('is_featured = 1');
+  }
+
+  if (filters.userId) {
+    conditions.push('user_id = ?');
+    values.push(filters.userId);
   }
 
   return {
@@ -127,6 +133,7 @@ export async function createJob(job) {
     `
       INSERT INTO jobs (
         title,
+        user_id,
         company,
         location,
         category,
@@ -139,10 +146,11 @@ export async function createJob(job) {
         apply_url,
         is_featured
       )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `,
     [
       job.title,
+      job.userId,
       job.company,
       job.location,
       job.category,

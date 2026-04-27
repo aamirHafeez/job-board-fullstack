@@ -2,11 +2,13 @@ import { ArrowLeft, CalendarDays, ExternalLink, MapPin } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ErrorState, LoadingState } from '../components/StatusMessage.jsx';
+import { useAuth } from '../context/useAuth.js';
 import { getJob } from '../services/api.js';
 import { formatDate, formatSalary } from '../utils/formatters.js';
 
 export default function JobDetails() {
   const { id } = useParams();
+  const { user } = useAuth();
   const [job, setJob] = useState(null);
   const [status, setStatus] = useState('loading');
   const [error, setError] = useState('');
@@ -98,9 +100,11 @@ export default function JobDetails() {
                 Browse Similar Jobs
               </Link>
             )}
-            <Link className="button button-secondary" to={`/dashboard/jobs/${job.id}/edit`}>
-              Edit Job
-            </Link>
+            {job.userId === user?.id ? (
+              <Link className="button button-secondary" to={`/dashboard/jobs/${job.id}/edit`}>
+                Edit Job
+              </Link>
+            ) : null}
           </div>
         </article>
       </div>
